@@ -1,0 +1,74 @@
+# Raspberry Pi LED Matrix using Python
+
+# Install required libraries:
+
+# pip install luma.led_matrix luma.core
+
+from luma.core.interface.serial import spi, noop
+from luma.core.render import canvas
+from luma.led_matrix.device import max7219
+from PIL import ImageFont
+import time
+
+# Connect MAX7219 LED Matrix
+
+serial = spi(
+port=0,
+device=0,
+gpio=noop()
+)
+
+device = max7219(
+serial,
+cascaded=1,
+block_orientation=90,
+rotate=0
+)
+
+# Load font
+
+font = ImageFont.truetype(
+"/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+8
+)
+
+def display_text(text):
+print("Displaying:", text)
+
+```
+# Display text for a few seconds
+with canvas(device) as draw:
+    draw.text(
+        (0, 0),
+        text,
+        fill="white",
+        font=font
+    )
+
+time.sleep(3)
+```
+
+while True:
+print("\n===== RASPBERRY PI LED MATRIX =====")
+print("1. Display Message")
+print("2. Display Welcome")
+print("3. Exit")
+
+```
+choice = input("Enter your choice: ")
+
+if choice == "1":
+    message = input("Enter message: ")
+    display_text(message)
+
+elif choice == "2":
+    display_text("HELLO")
+
+elif choice == "3":
+    print("LED Matrix System Closed.")
+    device.clear()
+    break
+
+else:
+    print("Invalid choice! Please try again.")
+```
